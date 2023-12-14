@@ -14,7 +14,12 @@ import {
   View,
 } from "native-base";
 import { FC, useEffect, useRef, useState } from "react";
-import { StyleSheet, Modal as RNModal, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Modal as RNModal,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import {
   widthPercentageToDP as wp,
@@ -120,13 +125,13 @@ const MapScreen: FC = () => {
           >
             <Flex mt={hp(1)} mx={wp(3)}>
               <View>
-                <Text>
+                <Text numberOfLines={1}>
                   <Text fontWeight={"bold"}>{item.title}</Text>,{" "}
                   {item.description}
                 </Text>
               </View>
               <View my={hp(0.5)}>
-                <Text fontSize={"xs"} color={"gray.500"}>
+                <Text numberOfLines={1} fontSize={"xs"} color={"gray.500"}>
                   {item.latitude}, {item.longitude}
                 </Text>
               </View>
@@ -254,21 +259,38 @@ const MapScreen: FC = () => {
                       borderRadius={wp(20)}
                       bgColor={"danger.500"}
                       onPress={() => {
-                        setModalVisible(false);
+                        Alert.alert(
+                          "Confirm Deletion",
+                          "Are you sure you want to delete this address?",
+                          [
+                            {
+                              text: "Cancel",
+                              style: "cancel",
+                            },
+                            {
+                              text: "Delete",
+                              onPress: () => {
+                                setModalVisible(false);
 
-                        deleteAddress(pickedMarker?.id || 0)
-                          .then((res: any) => {
-                            // console.log("res", res);
-                            setPickedMarker(null);
-                            setAddressInfo((prevAddressInfo) =>
-                              prevAddressInfo.filter(
-                                (item) => item.id !== pickedMarker?.id
-                              )
-                            );
-                          })
-                          .catch((err) => {
-                            console.log(err);
-                          });
+                                deleteAddress(pickedMarker?.id || 0)
+                                  .then((res: any) => {
+                                    // console.log("res", res);
+                                    setPickedMarker(null);
+                                    setAddressInfo((prevAddressInfo) =>
+                                      prevAddressInfo.filter(
+                                        (item) => item.id !== pickedMarker?.id
+                                      )
+                                    );
+                                  })
+                                  .catch((err) => {
+                                    console.log(err);
+                                  });
+                              },
+                              style: "destructive",
+                            },
+                          ],
+                          { cancelable: false }
+                        );
                       }}
                     >
                       Delete Location
