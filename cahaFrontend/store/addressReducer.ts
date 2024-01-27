@@ -32,8 +32,8 @@ const INIT_STATE: AddressStateType[] = [
   },
 ];
 
-export const userSlice = createSlice({
-  name: "price",
+export const addressSlice = createSlice({
+  name: "address",
   initialState: INIT_STATE,
   reducers: {
     loadData(states: AddressStateType[]) {
@@ -49,6 +49,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { loadData, resetAddress } = userSlice.actions;
+export const { loadData, resetAddress } = addressSlice.actions;
 
-export default userSlice.reducer;
+export default addressSlice.reducer;
